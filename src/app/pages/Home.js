@@ -4,25 +4,24 @@ import {
   InputBase,
   Typography,
   Grid,
-  IconButton,
+  Paper,
+  Button,
 } from "@material-ui/core";
 import React, { Component } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import styles from "../app-style";
-import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import { Favorite, FavoriteBorder } from "@material-ui/icons";
+import { withStyles } from "@material-ui/core/styles";
 import MovieCard from "../components/MovieCard";
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.nominate = this.nominate.bind(this);
+  }
   state = {
     input: "",
     results: [],
+    nominations: [],
   };
   handleInput = (e) => {
     const q = e.target.value;
@@ -37,10 +36,23 @@ class Home extends Component {
       input: e.target.value,
     });
   };
-  addToFavs = (e) => {};
+  nominate(result) {
+    const { nominations } = this.state;
+    var temp = nominations;
+    temp.unshift(result);
+    this.setState({ nominations: temp });
+  }
+  removeNomination(imdbID) {
+    const newList = this.state.nominations.filter(
+      (item) => item.imdbID !== imdbID
+    );
+    this.setState({ nominations: newList });
+  }
+  addToFavs = () => {};
   render() {
     const classes = this.props.classes;
     const results = this.state.results;
+    const nominations = this.state.nominations;
     return (
       <div>
         {" "}
@@ -70,23 +82,50 @@ class Home extends Component {
             </Toolbar>
           </AppBar>
         </div>
-        <Grid container spacing={3}>
+        <Grid container>
           <Grid item xs={8}>
             <div>
-              {results &&
-                results.map((result) => {
-                  return (
-                    <Grid container spacing={3}>
-                      <MovieCard movie={result}></MovieCard>
-                    </Grid>
-                  );
-                })}
+              <Grid container>
+                {results &&
+                  results.map((result) => {
+                    return (
+                      <Grid item xs={6}>
+                        <MovieCard
+                          key={result.imdbID}
+                          movie={result}
+                          nominate={() => this.nominate(result)}
+                        ></MovieCard>
+                      </Grid>
+                    );
+                  })}{" "}
+              </Grid>
             </div>
           </Grid>
-          <Grid item xs={4}>
-            <Typography variant="h4" gutterBottom>
-              Nominations
-            </Typography>
+          <Grid item xs={3}>
+            <Paper
+              className={classes.paper}
+              style={{ marginTop: "50px" }}
+              elevation={3}
+            >
+              <Typography variant="h4" gutterBottom align="center">
+                Nominations
+              </Typography>
+              {nominations.length > 0 &&
+                nominations.map((res) => {
+                  return (
+                    <div key={res.imdbID}>
+                      <p>{res.Title}</p>
+                      <Button
+                        onClick={() => {
+                          this.removeNomination(res.imdbID);
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  );
+                })}
+            </Paper>
           </Grid>
         </Grid>
       </div>

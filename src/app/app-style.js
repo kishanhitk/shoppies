@@ -1,4 +1,4 @@
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { fade } from "@material-ui/core/styles";
 const styles = (theme) => ({
   grow: {
     flexGrow: 1,
@@ -66,7 +66,10 @@ const styles = (theme) => ({
   },
   media: {
     height: 400,
-    
+  },
+  paper: {
+    height: "95vh",
+    width: "100%",
   },
 });
 export default styles;
