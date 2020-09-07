@@ -15,7 +15,8 @@ import styles from "../app-style";
 import { withStyles } from "@material-ui/core/styles";
 import MovieCard from "../components/MovieCard";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import Badge from "@material-ui/core/Badge";
+import MenuItem from "@material-ui/core/MenuItem";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -28,6 +29,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
+import { Favorite } from "@material-ui/icons";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -109,7 +111,7 @@ class Home extends Component {
       <div>
         {" "}
         <div className={classes.grow}>
-          <AppBar position="static">
+          <AppBar position="fixed">
             <Toolbar>
               <Typography className={classes.title} variant="h6" noWrap>
                 Shoppies
@@ -131,8 +133,19 @@ class Home extends Component {
               </div>
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}></div>
+              <MenuItem>
+                <IconButton
+                  aria-label="show 11 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={nominations.length} color="secondary">
+                    <Favorite></Favorite>
+                  </Badge>
+                </IconButton>
+              </MenuItem>
             </Toolbar>
-          </AppBar>
+          </AppBar>{" "}
+          <Toolbar />
         </div>
         <Grid container>
           <Grid item xs={12} md={8}>
