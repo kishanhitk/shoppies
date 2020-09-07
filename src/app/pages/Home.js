@@ -7,6 +7,7 @@ import {
   Paper,
   List,
   IconButton,
+  Divider,
 } from "@material-ui/core";
 import React, { Component } from "react";
 import SearchIcon from "@material-ui/icons/Search";
@@ -20,7 +21,16 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
-
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Slide from "@material-ui/core/Slide";
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +40,7 @@ class Home extends Component {
     input: "",
     results: [],
     nominations: [],
+    open: false,
   };
   handleInput = (e) => {
     const q = e.target.value;
@@ -53,14 +64,18 @@ class Home extends Component {
     });
   };
   nominate(result) {
-    const newSearch = this.state.results;
-    newSearch.forEach((res) => {
-      if (res.imdbID === result.imdbID) res.nominated = true;
-    });
     const { nominations } = this.state;
-    var temp = nominations;
-    temp.unshift(result);
-    this.setState({ nominations: temp, results: newSearch });
+    if (nominations.length < 5) {
+      const newSearch = this.state.results;
+      newSearch.forEach((res) => {
+        if (res.imdbID === result.imdbID) res.nominated = true;
+      });
+      var temp = nominations;
+      temp.unshift(result);
+      this.setState({ nominations: temp, results: newSearch });
+    } else {
+      this.setState({ open: true });
+    }
   }
   removeNomination(imdbID) {
     const newSearch = this.state.results;
@@ -72,11 +87,18 @@ class Home extends Component {
     );
     this.setState({ nominations: newList, results: newSearch });
   }
+  handleClose = () => {
+    this.setState((prev) => {
+      return {
+        ...prev,
+        open: !prev.open,
+      };
+    });
+  };
   addToFavs = () => {};
   render() {
     const classes = this.props.classes;
-    const results = this.state.results;
-    const nominations = this.state.nominations;
+    const { open, nominations, results } = this.state;
     return (
       <div>
         {" "}
@@ -134,6 +156,7 @@ class Home extends Component {
               <Typography variant="h4" gutterBottom align="center">
                 Nominations
               </Typography>
+              <Divider></Divider>
               <List>
                 {nominations.length > 0 &&
                   nominations.map((res) => {
@@ -166,6 +189,28 @@ class Home extends Component {
             </Paper>
           </Grid>
         </Grid>
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-slide-title"
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle id="alert-dialog-slide-title">
+            Maximum Nominations Reached
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              You can nominate only 5 movies. 
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Okay! Got it.
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }

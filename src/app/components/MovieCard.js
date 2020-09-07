@@ -34,7 +34,7 @@ class MovieCard extends Component {
               style={{ objectFit: "contain" }}
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
+              <Typography gutterBottom variant="h6" component="h2" noWrap>
                 {result.Title}
               </Typography>
               <Typography variant="body2" color="textSecondary" component="p">
@@ -44,8 +44,10 @@ class MovieCard extends Component {
           </CardActionArea>
           <CardActions>
             <Button
+              variant="outlined"
+              align="right"
+              color="red"
               disabled={result.nominated}
-              // onClick={() => }
               onClick={() => {
                 this.props.nominate();
               }}
@@ -54,6 +56,7 @@ class MovieCard extends Component {
             </Button>
           </CardActions>
         </Card>
+        
       </div>
     );
   }
