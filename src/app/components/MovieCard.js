@@ -46,14 +46,13 @@ class MovieCard extends Component {
           </CardActionArea>
           <CardActions>
             <Button
-              disabled={isNominated}
+              disabled={result.nominated}
               // onClick={() => }
               onClick={() => {
                 this.props.nominate();
-                this.addToFavs();
               }}
             >
-              {isNominated ? "Added to Nominations" : "Nominate"}
+              {result.nominated ? "Added to Nominations" : "Nominate"}
             </Button>
           </CardActions>
         </Card>

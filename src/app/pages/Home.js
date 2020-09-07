@@ -29,6 +29,9 @@ class Home extends Component {
       fetch(`http://www.omdbapi.com/?s=${q}&apikey=2e2cb7ed&`)
         .then((res) => res.json())
         .then((result) => {
+          result.Search.forEach((res) => {
+            res.nominated = false;
+          });
           this.setState({ results: result.Search });
           console.log(result.Search);
         });
@@ -37,16 +40,24 @@ class Home extends Component {
     });
   };
   nominate(result) {
+    const newSearch = this.state.results;
+    newSearch.forEach((res) => {
+      if (res.imdbID === result.imdbID) res.nominated = true;
+    });
     const { nominations } = this.state;
     var temp = nominations;
     temp.unshift(result);
-    this.setState({ nominations: temp });
+    this.setState({ nominations: temp, results: newSearch });
   }
   removeNomination(imdbID) {
+    const newSearch = this.state.results;
+    newSearch.forEach((res) => {
+      if (res.imdbID === imdbID) res.nominated = false;
+    });
     const newList = this.state.nominations.filter(
       (item) => item.imdbID !== imdbID
     );
-    this.setState({ nominations: newList });
+    this.setState({ nominations: newList, results: newSearch });
   }
   addToFavs = () => {};
   render() {
