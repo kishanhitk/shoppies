@@ -5,13 +5,21 @@ import {
   Typography,
   Grid,
   Paper,
-  Button,
+  List,
+  IconButton,
 } from "@material-ui/core";
 import React, { Component } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import styles from "../app-style";
 import { withStyles } from "@material-ui/core/styles";
 import MovieCard from "../components/MovieCard";
+import DeleteIcon from "@material-ui/icons/Delete";
+
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from "@material-ui/core/Avatar";
 
 class Home extends Component {
   constructor(props) {
@@ -29,11 +37,16 @@ class Home extends Component {
       fetch(`http://www.omdbapi.com/?s=${q}&apikey=2e2cb7ed&`)
         .then((res) => res.json())
         .then((result) => {
-          result.Search.forEach((res) => {
-            res.nominated = false;
-          });
-          this.setState({ results: result.Search });
-          console.log(result.Search);
+          if (result.Response === "True") {
+            result.Search.forEach((res) => {
+              res.nominated = false;
+            });
+            this.setState({ results: result.Search });
+            console.log(result.Search);
+          } else {
+            console.log(e);
+            window.alert(result.Error);
+          }
         });
     this.setState({
       input: e.target.value,
@@ -94,25 +107,25 @@ class Home extends Component {
           </AppBar>
         </div>
         <Grid container>
-          <Grid item xs={8}>
+          <Grid item xs={12} md={8}>
             <div>
               <Grid container>
                 {results &&
                   results.map((result) => {
                     return (
-                      <Grid item xs={6}>
+                      <Grid item xs={12} md={6}>
                         <MovieCard
-                          key={result.imdbID}
+                          key={`${result.imdbID}card`}
                           movie={result}
                           nominate={() => this.nominate(result)}
                         ></MovieCard>
                       </Grid>
                     );
-                  })}{" "}
+                  })}
               </Grid>
             </div>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} md={3}>
             <Paper
               className={classes.paper}
               style={{ marginTop: "50px" }}
@@ -121,21 +134,35 @@ class Home extends Component {
               <Typography variant="h4" gutterBottom align="center">
                 Nominations
               </Typography>
-              {nominations.length > 0 &&
-                nominations.map((res) => {
-                  return (
-                    <div key={res.imdbID}>
-                      <p>{res.Title}</p>
-                      <Button
-                        onClick={() => {
-                          this.removeNomination(res.imdbID);
-                        }}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  );
-                })}
+              <List>
+                {nominations.length > 0 &&
+                  nominations.map((res) => {
+                    return (
+                      <div key={`${res.imdbID}nomi`}>
+                        <ListItem>
+                          <ListItemAvatar>
+                            <Avatar src={res.Poster}></Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={res.Title}
+                            secondary={res.Year}
+                          />
+                          <ListItemSecondaryAction>
+                            <IconButton
+                              edge="end"
+                              aria-label="delete"
+                              onClick={() => {
+                                this.removeNomination(res.imdbID);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      </div>
+                    );
+                  })}
+              </List>
             </Paper>
           </Grid>
         </Grid>

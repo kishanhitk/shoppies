@@ -8,7 +8,6 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import { Favorite, FavoriteBorder } from "@material-ui/icons";
 class MovieCard extends Component {
   state = {
     isNominated: false,
@@ -24,7 +23,6 @@ class MovieCard extends Component {
   render() {
     const result = this.props.movie;
     const classes = this.props.classes;
-    const isNominated = this.state.isNominated;
     return (
       <div style={{ objectFit: "contain", margin: "50px" }}>
         <Card className={classes.root}>
@@ -32,7 +30,7 @@ class MovieCard extends Component {
             <CardMedia
               className={classes.media}
               image={result.Poster}
-              title="Contemplative Reptile"
+              title={result.Title}
               style={{ objectFit: "contain" }}
             />
             <CardContent>
