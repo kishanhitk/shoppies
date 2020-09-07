@@ -45,7 +45,7 @@ class Home extends Component {
   handleInput = (e) => {
     const q = e.target.value;
     q.length > 2 &&
-      fetch(`http://www.omdbapi.com/?s=${q}&apikey=2e2cb7ed&`)
+      fetch(`https://www.omdbapi.com/?s=${q}&apikey=2e2cb7ed&`)
         .then((res) => res.json())
         .then((result) => {
           if (result.Response === "True") {
