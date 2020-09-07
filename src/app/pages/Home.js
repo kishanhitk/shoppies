@@ -30,6 +30,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import { Favorite } from "@material-ui/icons";
+import Popover from "@material-ui/core/Popover";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -43,6 +44,7 @@ class Home extends Component {
     results: [],
     nominations: [],
     open: false,
+    anchorEl: null,
   };
   handleInput = (e) => {
     const q = e.target.value;
@@ -64,6 +66,9 @@ class Home extends Component {
     this.setState({
       input: e.target.value,
     });
+  };
+  openPopover = (event) => {
+    this.setState({ anchorEl: event.currentTarget });
   };
   nominate(result) {
     const { nominations } = this.state;
@@ -100,13 +105,18 @@ class Home extends Component {
       };
     });
   };
+  handleClosePopOver = () => {
+    this.setState({ anchorEl: null });
+  };
   componentDidMount() {
     var localData = window.localStorage.getItem("nominations");
     this.setState({ nominations: JSON.parse(localData) || [] });
   }
   render() {
     const classes = this.props.classes;
-    const { open, nominations, results } = this.state;
+    const { open, nominations, results, anchorEl } = this.state;
+    const openPopover = Boolean(anchorEl);
+    const id = openPopover ? "simple-popover" : undefined;
     return (
       <div>
         {" "}
@@ -137,11 +147,66 @@ class Home extends Component {
                 <IconButton
                   aria-label="show 11 new notifications"
                   color="inherit"
+                  onClick={this.openPopover}
                 >
                   <Badge badgeContent={nominations.length} color="secondary">
                     <Favorite></Favorite>
                   </Badge>
                 </IconButton>
+                <Popover
+                  id={id}
+                  open={openPopover}
+                  anchorEl={anchorEl}
+                  onClose={this.handleClosePopOver}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "center",
+                  }}
+                >
+                  <Paper
+                    className={classes.paper}
+                    style={{ marginTop: "50px" }}
+                    elevation={3}
+                  >
+                    <Typography variant="h4" gutterBottom align="center">
+                      Nominations
+                    </Typography>
+                    <Divider></Divider>
+                    <List>
+                      {nominations.length > 0 &&
+                        nominations.map((res) => {
+                          return (
+                            <div key={`${res.imdbID}nomi`}>
+                              <ListItem>
+                                <ListItemAvatar>
+                                  <Avatar src={res.Poster}></Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                  primary={res.Title}
+                                  secondary={res.Year}
+                                />
+                                <ListItemSecondaryAction>
+                                  <IconButton
+                                    edge="end"
+                                    aria-label="delete"
+                                    onClick={() => {
+                                      this.removeNomination(res.imdbID);
+                                    }}
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </ListItemSecondaryAction>
+                              </ListItem>
+                            </div>
+                          );
+                        })}
+                    </List>
+                  </Paper>
+                </Popover>
               </MenuItem>
             </Toolbar>
           </AppBar>{" "}
