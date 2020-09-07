@@ -72,6 +72,8 @@ class Home extends Component {
       });
       var temp = nominations;
       temp.unshift(result);
+      window.localStorage.setItem("nominations", JSON.stringify(temp));
+
       this.setState({ nominations: temp, results: newSearch });
     } else {
       this.setState({ open: true });
@@ -85,6 +87,7 @@ class Home extends Component {
     const newList = this.state.nominations.filter(
       (item) => item.imdbID !== imdbID
     );
+    window.localStorage.setItem("nominations", JSON.stringify(newList));
     this.setState({ nominations: newList, results: newSearch });
   }
   handleClose = () => {
@@ -95,7 +98,10 @@ class Home extends Component {
       };
     });
   };
-  addToFavs = () => {};
+  componentDidMount() {
+    var localData = window.localStorage.getItem("nominations");
+    this.setState({ nominations: JSON.parse(localData) || [] });
+  }
   render() {
     const classes = this.props.classes;
     const { open, nominations, results } = this.state;
@@ -202,7 +208,7 @@ class Home extends Component {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              You can nominate only 5 movies. 
+              You can nominate only 5 movies.
             </DialogContentText>
           </DialogContent>
           <DialogActions>
