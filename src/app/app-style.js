@@ -62,13 +62,15 @@ const styles = (theme) => ({
     },
   },
   root: {
-    maxWidth: 345,
+    maxWidth: 205,
+    marginTop: 20,
+    marginBottom: 20,
   },
   media: {
-    height: 400,
+    height: 300,
   },
   paper: {
-    height: "95vh",
+    height: "70vh",
     width: "100%",
   },
 });

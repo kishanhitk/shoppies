@@ -24,39 +24,44 @@ class MovieCard extends Component {
     const result = this.props.movie;
     const classes = this.props.classes;
     return (
-      <div style={{ objectFit: "contain", margin: "50px" }}>
-        <Card className={classes.root}>
-          <CardActionArea>
-            <CardMedia
-              className={classes.media}
-              image={result.Poster}
-              title={result.Title}
-              style={{ objectFit: "contain" }}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h6" component="h2" noWrap>
-                {result.Title}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                {result.Year}
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-          <CardActions>
-            <Button
-              variant="outlined"
-              align="right"
-              color="red"
-              disabled={result.nominated}
-              onClick={() => {
-                this.props.nominate();
-              }}
-            >
-              {result.nominated ? "Added to Nominations" : "Nominate"}
-            </Button>
-          </CardActions>
-        </Card>
-        
+      <div>
+        <center>
+          <Card className={classes.root} align="center">
+            <CardActionArea>
+              <CardMedia
+                className={classes.media}
+                image={
+                  result.Poster === "N/A"
+                    ? "https://icon-library.com/images/no-image-available-icon/no-image-available-icon-6.jpg"
+                    : result.Poster
+                }
+                title={result.Title}
+                style={{ objectFit: "contain" }}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h6" component="h2" noWrap>
+                  {result.Title}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {result.Year}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+            <CardActions>
+              <Button
+                variant="outlined"
+                align="right"
+                color="red"
+                disabled={result.nominated}
+                onClick={() => {
+                  this.props.nominate();
+                }}
+              >
+                {result.nominated ? "Added" : "Nominate"}
+              </Button>
+            </CardActions>
+          </Card>
+        </center>
       </div>
     );
   }

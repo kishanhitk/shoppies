@@ -9,6 +9,10 @@ import {
   IconButton,
   Divider,
 } from "@material-ui/core";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
+import ListSubheader from "@material-ui/core/ListSubheader";
 import React, { Component } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import styles from "../app-style";
@@ -119,7 +123,6 @@ class Home extends Component {
     const id = openPopover ? "simple-popover" : undefined;
     return (
       <div>
-        {" "}
         <div className={classes.grow}>
           <AppBar position="fixed">
             <Toolbar>
@@ -167,112 +170,73 @@ class Home extends Component {
                     horizontal: "center",
                   }}
                 >
-                  <Paper
+                  {/* <Paper
                     className={classes.paper}
                     style={{ marginTop: "50px" }}
                     elevation={3}
-                  >
-                    <Typography variant="h4" gutterBottom align="center">
-                      Nominations
-                    </Typography>
-                    <Divider></Divider>
-                    <List>
-                      {nominations.length > 0 &&
-                        nominations.map((res) => {
-                          return (
-                            <div key={`${res.imdbID}nomi`}>
-                              <ListItem>
-                                <ListItemAvatar>
-                                  <Avatar src={res.Poster}></Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                  primary={res.Title}
-                                  secondary={res.Year}
-                                />
-                                <ListItemSecondaryAction>
-                                  <IconButton
-                                    edge="end"
-                                    aria-label="delete"
-                                    onClick={() => {
-                                      this.removeNomination(res.imdbID);
-                                    }}
-                                  >
-                                    <DeleteIcon />
-                                  </IconButton>
-                                </ListItemSecondaryAction>
-                              </ListItem>
-                            </div>
-                          );
-                        })}
-                    </List>
-                  </Paper>
+                  > */}
+                  <Typography variant="h4" gutterBottom align="center">
+                    Nominations
+                  </Typography>
+                  <Divider></Divider>
+                  <List>
+                    {nominations.length > 0 &&
+                      nominations.map((res) => {
+                        return (
+                          <div key={`${res.imdbID}nomi`}>
+                            <ListItem>
+                              <ListItemAvatar>
+                                <Avatar src={res.Poster}></Avatar>
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={res.Title}
+                                secondary={res.Year}
+                              />
+                              <ListItemSecondaryAction>
+                                <IconButton
+                                  edge="end"
+                                  aria-label="delete"
+                                  onClick={() => {
+                                    this.removeNomination(res.imdbID);
+                                  }}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                          </div>
+                        );
+                      })}
+                  </List>
+                  {/* </Paper> */}
                 </Popover>
               </MenuItem>
             </Toolbar>
           </AppBar>{" "}
           <Toolbar />
         </div>
-        <Grid container>
-          <Grid item xs={12} md={8}>
-            <div>
-              <Grid container>
-                {results &&
-                  results.map((result) => {
-                    return (
-                      <Grid item xs={12} md={6}>
-                        <MovieCard
-                          key={`${result.imdbID}card`}
-                          movie={result}
-                          nominate={() => this.nominate(result)}
-                        ></MovieCard>
-                      </Grid>
-                    );
-                  })}
-              </Grid>
-            </div>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Paper
-              className={classes.paper}
-              style={{ marginTop: "50px" }}
-              elevation={3}
-            >
-              <Typography variant="h4" gutterBottom align="center">
-                Nominations
-              </Typography>
-              <Divider></Divider>
-              <List>
-                {nominations.length > 0 &&
-                  nominations.map((res) => {
-                    return (
-                      <div key={`${res.imdbID}nomi`}>
-                        <ListItem>
-                          <ListItemAvatar>
-                            <Avatar src={res.Poster}></Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={res.Title}
-                            secondary={res.Year}
-                          />
-                          <ListItemSecondaryAction>
-                            <IconButton
-                              edge="end"
-                              aria-label="delete"
-                              onClick={() => {
-                                this.removeNomination(res.imdbID);
-                              }}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      </div>
-                    );
-                  })}
-              </List>
-            </Paper>
-          </Grid>
+
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          spacing={1}
+        >
+          {results &&
+            results.map((result) => {
+              return (
+                <Grid item xs={12} md={4} lg={3} sm={6}>
+                  <MovieCard
+                    key={`${result.imdbID}card`}
+                    movie={result}
+                    nominate={() => this.nominate(result)}
+                  ></MovieCard>
+                </Grid>
+              );
+            })}
         </Grid>
+
         <Dialog
           open={open}
           TransitionComponent={Transition}
