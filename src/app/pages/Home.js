@@ -175,12 +175,12 @@ class Home extends Component {
                     style={{ marginTop: "50px" }}
                     elevation={3}
                   > */}
-                  <Typography variant="h4" gutterBottom align="center">
-                    Nominations
+                  <Typography variant="h6" gutterBottom align="center">
+                    My Nominations
                   </Typography>
                   <Divider></Divider>
-                  <List>
-                    {nominations.length > 0 &&
+                  <List style={{ margin: 10, align: "center", maxWidth: 405 }}>
+                    {nominations.length > 0 ? (
                       nominations.map((res) => {
                         return (
                           <div key={`${res.imdbID}nomi`}>
@@ -189,6 +189,7 @@ class Home extends Component {
                                 <Avatar src={res.Poster}></Avatar>
                               </ListItemAvatar>
                               <ListItemText
+                                
                                 primary={res.Title}
                                 secondary={res.Year}
                               />
@@ -206,7 +207,13 @@ class Home extends Component {
                             </ListItem>
                           </div>
                         );
-                      })}
+                      })
+                    ) : (
+                      <Typography>
+                        Nothing here.
+                        <br /> Start Adding movies to your nomination
+                      </Typography>
+                    )}
                   </List>
                   {/* </Paper> */}
                 </Popover>
