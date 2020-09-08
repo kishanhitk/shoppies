@@ -62,7 +62,7 @@ const styles = (theme) => ({
     },
   },
   root: {
-    maxWidth: 205,
+    maxWidth: 225,
     marginTop: 20,
     marginBottom: 20,
   },
